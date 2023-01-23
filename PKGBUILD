@@ -22,7 +22,7 @@ provides=("$_pkgname=$pkgver")
 install=$_pkgname.install
 backup=('etc/modprobe.d/$_linuxprefix-broadcom-wl.conf')
 source=(broadcom-wl-dkms.conf)
-sha256sums=(SKIP)
+sha256sums=('b97bc588420d1542f73279e71975ccb5d81d75e534e7b5717e01d6e6adf6a283')
 
 build() {
   _kernver=$(find /usr/lib/modules -type d -iname 5.15.89*xanmod* | rev | cut -d "/" -f1 | rev)
