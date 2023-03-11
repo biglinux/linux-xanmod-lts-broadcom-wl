@@ -4,11 +4,11 @@
 # Based on the file created for Arch Linux by: Frank Vanderham
 
 _linuxprefix=linux-xanmod-lts
-_extramodules=$(find /usr/lib/modules -type d -iname 6.1.15*xanmod* | rev | cut -d "/" -f1 | rev)
+_extramodules=$(find /usr/lib/modules -type d -iname 6.1.16*xanmod* | rev | cut -d "/" -f1 | rev)
 pkgname=$_linuxprefix-broadcom-wl
 _pkgname=broadcom-wl
 pkgver=6.30.223.271
-pkgrel=61151
+pkgrel=61161
 pkgdesc='Broadcom 802.11 Linux STA wireless driver BCM43142.'
 url='https://bbs.archlinux.org/viewtopic.php?id=145884'
 arch=('x86_64')
@@ -25,7 +25,7 @@ source=(broadcom-wl-dkms.conf)
 sha256sums=('b97bc588420d1542f73279e71975ccb5d81d75e534e7b5717e01d6e6adf6a283')
 
 build() {
-  _kernver=$(find /usr/lib/modules -type d -iname 6.1.15*xanmod* | rev | cut -d "/" -f1 | rev)
+  _kernver=$(find /usr/lib/modules -type d -iname 6.1.16*xanmod* | rev | cut -d "/" -f1 | rev)
 
   # build host modules
   msg2 'Build module'
@@ -39,7 +39,7 @@ build() {
 }
 
 package(){
-  _kernver=$(find /usr/lib/modules -type d -iname 6.1.15*xanmod* | rev | cut -d "/" -f1 | rev)
+  _kernver=$(find /usr/lib/modules -type d -iname 6.1.16*xanmod* | rev | cut -d "/" -f1 | rev)
 
   install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
   cd "broadcom-wl/$pkgver/$_kernver/$CARCH/module"
