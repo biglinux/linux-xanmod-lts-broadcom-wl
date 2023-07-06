@@ -8,7 +8,7 @@ _extramodules=$(find /usr/lib/modules -type d -iname 6.1.37*xanmod* | rev | cut 
 pkgname=$_linuxprefix-broadcom-wl
 _pkgname=broadcom-wl
 pkgver=6.30.223.271
-pkgrel=61371
+pkgrel=61372
 pkgdesc='Broadcom 802.11 Linux STA wireless driver BCM43142.'
 url='https://bbs.archlinux.org/viewtopic.php?id=145884'
 arch=('x86_64')
