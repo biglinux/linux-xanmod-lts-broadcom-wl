@@ -24,6 +24,7 @@ source=(broadcom-wl-dkms.conf)
 sha256sums=('b97bc588420d1542f73279e71975ccb5d81d75e534e7b5717e01d6e6adf6a283')
 
 build() {
+  _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 
   # build host modules
   msg2 'Build module'
