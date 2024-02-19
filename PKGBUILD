@@ -1,47 +1,39 @@
-# Maintainer: Bernhard Landauer <bernhard@manjaro.org>
 # Maintainer: Philip Müller <philm[at]manjaro[dot]org>
-# Arch credits:
-# Based on the file created for Arch Linux by: Frank Vanderham
+# Maintainer: Bernhard Landauer <bernhard@manjaro.org>
+# Contributor: Eli Schwartz <eschwartz@archlinux.org>
 
 _linuxprefix=linux-xanmod-lts
-_kernver="$(cat /usr/src/${_linuxprefix}/version)"
-pkgname=$_linuxprefix-broadcom-wl
-_pkgname=broadcom-wl
+
+_module=broadcom-wl
+pkgname="${_linuxprefix}-${_module}"
 pkgver=6.30.223.271
-pkgrel=61771
-pkgdesc='Broadcom 802.11 Linux STA wireless driver BCM43142.'
-url='https://bbs.archlinux.org/viewtopic.php?id=145884'
+pkgrel=66172
+pkgdesc='Broadcom 802.11 Linux STA wireless driver'
 arch=('x86_64')
+url='https://www.broadcom.com/support/download-search/?pf=Wireless+LAN+Infrastructure'
 license=('custom')
-depends=("$_linuxprefix")
-makedepends=("broadcom-wl-dkms>=$pkgver"
-             'dkms'
-             "$_linuxprefix" "$_linuxprefix-headers")
-groups=("$_linuxprefix-extramodules")
-provides=("$_pkgname=$pkgver")
-backup=('etc/modprobe.d/$_linuxprefix-broadcom-wl.conf')
-source=(broadcom-wl-dkms.conf)
-sha256sums=('b97bc588420d1542f73279e71975ccb5d81d75e534e7b5717e01d6e6adf6a283')
+groups=("${_linuxprefix}-extramodules")
+depends=("${_linuxprefix}")
+makedepends=("${_module}-dkms=$pkgver" "${_linuxprefix}-headers")
 
 build() {
   _kernver="$(cat /usr/src/${_linuxprefix}/version)"
+  _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 
-  # build host modules
-  msg2 'Build module'
-
-  CFLAGS="${CFLAGS} -Wno-error"
-  CXXFLAGS="${CXXFLAGS}  -Wno-error"
-
-  msg2 "$CFLAGS, ${CXXFLAGS}"
-
-  fakeroot dkms build --dkmstree "$srcdir" -m "broadcom-wl/$pkgver" -k "$_kernver"
+  fakeroot dkms build --dkmstree "$srcdir" -m "${_module}/$pkgver" -k "${_kernver}"
 }
 
 package(){
+  _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 
-  install -dm755 "$pkgdir/usr/lib/modules/${_kernver}/extramodules"
-  cd "broadcom-wl/$pkgver/$_kernver/$CARCH/module"
-  install -m644 * "$pkgdir/usr/lib/modules/${_kernver}/extramodules"
-  find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
-  install -D -m 644 "${srcdir}/broadcom-wl-dkms.conf" "${pkgdir}/etc/modprobe.d/${_linuxprefix}-broadcom-wl.conf"
+  install -Dm644 -t "${pkgdir}/usr/lib/modules/${_kernver}/extramodules" \
+    ${_module}/${pkgver}/${_kernver}/${CARCH}/module/*
+
+  # compress kernel modules
+  find "$pkgdir" -name "*.ko" -exec xz {} +
+
+  install -Dm644 "/usr/share/licenses/${_module}-dkms"/* -t \
+    "${pkgdir}/usr/share/licenses/$pkgname/"
+  install -Dm644 "/usr/lib/modprobe.d/${_module}-dkms.conf" \
+      "${pkgdir}/usr/lib/modprobe.d/$pkgname.conf"
 }
